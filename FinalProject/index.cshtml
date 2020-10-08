@@ -1,0 +1,126 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    Layout = "~/Layouts/_Layout.cshtml";
+    if (User.Identity.IsAuthenticated && !User.IsInRole("admin"))
+    {
+        var userLogic = DependencyResolver.UsersLogic;
+        if(userLogic.GetID(User.Identity.Name) != -1)
+        {
+            Common.UserID = userLogic.GetID(User.Identity.Name);
+        }
+    }
+}
+<body>
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <text>
+            @RenderPage("~/Pages/header.cshtml");
+        </text>
+    }
+    else
+    {
+        <text>
+            @RenderPage("~/Pages/headerUser.cshtml");
+        </text>
+    }
+    @if (User.IsInRole("admin"))
+    {
+        <a href="~/Pages/AdminBar.cshtml"><button id="button-PanelAdmin">Панель администратора</button></a>
+    }
+    <div id="content">
+        <h1>Подготовка к ЕГЭ | ОГЭ по истории и обществознанию</h1>
+        <div class="box">
+            <div class="header-box"><strong>Почему Вы здесь?</strong></div>
+            <p>
+                Настал важный год перед заключительными экзаменами, а Вы или Ваши родители поняли, что нет необходимых
+                знаний для их cдачи? Тогда Вы в правильном месте. Я докажу Вам, что любой, даже самый малознающий человек,
+                с моими уроками способен сдать ОГЭ или ЕГЭ на самый высший балл.
+            </p>
+        </div>
+        <div id="trial-lesson">
+            <div id="trial-lesson-header">Хотите проверить качество моей подготовки и уровень Ваших знаний?</div>
+            <form action="~/Pages/setTrialLesson" method="post">
+                <input type="text" name="trial-lesson-name" placeholder="Как Вас зовут?" />
+                <input type="text" name="trial-lesson-phone" placeholder="Ваш номер телефона" />
+                <input type="text" name="trial-lesson-email" placeholder="Ваша почта" />
+                Данные записаны верно?<br />
+                <input type="checkbox" name="trial-lesson-agree" value="" />Согласен(на) с условиями пользовательского соглашения
+                <button>Записаться на пробный урок</button>
+            </form>
+        </div>
+
+        <div class="box">
+            <div class="header-box"><strong>Что вообще происходит на занятиях?</strong></div>
+            <a href="~/Pages/EGE-Istoriya" class="lesson-link" id="history-box-link">
+                <div id="history-box" class="lesson-box">
+                    <img src="~/Images/globe-563239_1920.jpg" alt="История" />
+                    <strong>История</strong>
+                    <div class="lesson-button">Подробнее</div>
+                </div>
+            </a>
+            <a href="~/Pages/EGE-Social" class="lesson-link" id="social-box-link">
+                <div id="social-box" class="lesson-box">
+                    <img src="~/Images/network-1020309_1920.jpg" alt="Обществознание" />
+                    <strong>Обществознание</strong>
+                    <div class="lesson-button">Подробнее</div>
+                </div>
+            </a>
+            <a href="~/Pages/blog" class="lesson-link" id="blog-box-link">
+                <div id="blog-box" class="lesson-box">
+                    <img src="~/Images/blog-3596548_1280.png" alt="Блог" />
+                    <strong>Блог</strong>
+                    <div class="lesson-button">Подробнее</div>
+                </div>
+            </a>
+        </div>
+        <div class="box" id="who-am-i">
+            <div class="header-box"><strong>Кто же я?</strong></div>
+            <p>
+                Дорогие мои старшеклассники (и их родители). Я работаю для того, чтобы помочь Вам пережить год перед итоговыми экзаменами.
+
+                Я - репетитор по истории и обществознанию (уже более 5 лет) и Ваш персональный помощник и советчик во всем.
+
+                Я (кстати, меня зовут Анастасия) сама сдавала ОГЭ и ЕГЭ и прекрасно понимаю, что испытывают ребята в старших классах.
+
+                Сухие факты, скучные истории и заумные фразы преподавателей, от которых хочется спать - не для Вас.
+
+                Обсуждения современной ситуации, дискуссии, забавные исторические случаи и мемы - вот, что Вам подходит.
+            </p>
+            <img src="~/Images/e7aeff85f4e66b14d1098dc84ec3-1458231.jpg!d.jpg" alt="Alternate Text" />
+            <strong>Со мной вы...</strong>
+            <ul>
+                <i>Научитесь:</i>
+                <ul>
+                    <li>Легко и просто разбираться в исторических датах</li>
+                    <li>Отличать Лжедмитрия I от Лжедмитрия II</li>
+                    <li>Эффективно запоминать всю необходимую информацию</li>
+                </ul>
+                <br>
+                <i>Разберетесь в:</i>
+                <ul>
+                    <li>Месте конкретного человека в обществе</li>
+                    <li>Сложных понятиях обществознания</li>
+                    <li>Структуре экзаменов типа ОГЭ и ЕГЭ и как их сдать максимально результативно</li>
+                </ul>
+                <br>
+                <i>А также...</i>
+                <ul>
+                    <li>Приобретете нового друга</li>
+                    <li>Будете много смеяться</li>
+                    <li>Поймете в чем смысл бытия</li>
+                </ul>
+            </ul>
+        </div>
+        <div class="box" id="why-am-i">
+            <div class="header-box"><strong>Почему ученики выбирают меня:</strong></div>
+            <ul>
+                <li>Эксклюзивные методики предоставления материала</li>
+                <li>Личный подход к каждому ученику</li>
+                <li>Никаких скучных занятий. Всегда только интересная и веселая подача</li>
+                <li>Доступная цена занятий</li>
+            </ul>
+        </div>
+    </div>
+</body>

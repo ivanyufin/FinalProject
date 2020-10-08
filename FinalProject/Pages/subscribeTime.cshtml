@@ -1,0 +1,50 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    var timeLessonLogic = DependencyResolver.Time_LessonLogic;
+    var usersTimeLessonLogic = DependencyResolver.Users_TimeLessonLogic;
+
+    var dayLesson = new DayLesson() { Day_Lesson = new DateTime(Convert.ToInt32(Request["year"]), Convert.ToInt32(Request["month"]), Convert.ToInt32(Request["day"])) };
+    var timeLesson = dayLesson.Day_Lesson.AddHours(Convert.ToInt32(Request["hour"])).AddMinutes(Convert.ToInt32(Request["minute"]));
+    var hour = "";
+    var minute = "";
+
+    var date = dayLesson.Day_Lesson.Day + "." + dayLesson.Day_Lesson.Month + "." + dayLesson.Day_Lesson.Year;
+    if (timeLesson.Hour < 10)
+    {
+        hour = "0" + timeLesson.Hour.ToString();
+    }
+    else
+    {
+        hour = timeLesson.Hour.ToString();
+    }
+    if (timeLesson.Minute < 10)
+    {
+        minute = "0" + timeLesson.Minute.ToString();
+    }
+    else
+    {
+        minute = timeLesson.Minute.ToString();
+    }
+    if (!timeLessonLogic.ExistSubscribe(dayLesson, timeLesson, Common.UserID))
+    {
+        if (timeLessonLogic.SubscribeUser(dayLesson, timeLesson, Common.UserID) && usersTimeLessonLogic.SubscribeUser(timeLesson, Common.UserID))
+        {
+            <text>
+                Успешно! Вы записались на занятия @date в @hour:@minute
+            </text>
+        }
+        else
+        {
+            Response.Redirect("~/Pages/errorPage");
+        }
+    }
+    else
+    {
+
+        <text>
+            Ошибка! Вы уже записаны на занятие @date в @hour:@minute
+        </text>
+    }
+}

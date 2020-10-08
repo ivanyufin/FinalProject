@@ -1,0 +1,16 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    Layout = null;
+    var name = Request["trial-lesson-name"];
+    var phone = Request["trial-lesson-phone"];
+    var email = Request["trial-lesson-email"];
+
+    var trialLessonLogic = DependencyResolver.Trial_LessonLogic;
+    if(!trialLessonLogic.Add(new TrialLesson() { Name = name, Phone = phone, Email = email }))
+    {
+        Response.Redirect("~/Pages/errorPage");
+    }
+    Response.Redirect("~/index");
+}

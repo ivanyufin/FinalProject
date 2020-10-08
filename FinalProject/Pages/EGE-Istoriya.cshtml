@@ -1,0 +1,64 @@
+﻿@{
+    Layout = "~/Layouts/_Layout.cshtml";
+    string name = "истории";
+    string ekzam = "ЕГЭ";
+}
+<body>
+    @RenderPage("~/Pages/header.cshtml")
+    <div id="content">
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <h1>Решили подтянуть свои знания в @name на @ekzam? Правильно</h1>
+            <div class="box" id="why-am-i">
+                <div class="header-box"><strong>И вот почему...</strong></div>
+                <ul>
+                    <li>Эксклюзивные методики предоставления материала</li>
+                    <li>Личный подход к каждому ученику</li>
+                    <li>Никаких скучных занятий. Всегда только интересная и веселая подача</li>
+                    <li>Доступная цена занятий</li>
+                </ul>
+            </div>
+            <div class="full-box">
+                <div class="header-full-box"><strong>Прайс-лист</strong></div>
+                <table>
+                    <tr>
+                        <td>Индивидуальное занятие (60 мин.)</td>
+                        <td>800 руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Индивидуальное занятие (90 мин.)</td>
+                        <td>1100 руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Индивидуальное занятие (120 мин.)</td>
+                        <td>2000 руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Полноценный курс за лето (июнь - август)</td>
+                        <td>7000 руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Полноценный курс 2-3 месяца</td>
+                        <td>12000 руб.</td>
+                    </tr>
+                    <tr>
+                        <td>Занятия на индивидуальных условиях</td>
+                        <td>По договоренности</td>
+                    </tr>
+                    <tr>
+                        <td>Три и более занятий в неделю</td>
+                        <td>1000 руб. (90 мин.)<br />за одно занятие</td>
+                    </tr>
+                    <tr>
+                        <td>Два занятия в неделю</td>
+                        <td>900 руб. (90 мин.)<br />за одно занятие</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="box">
+                <div class="header-box"><strong>Готовы начать? Отлично</strong></div>
+                <p>Для начала Вам необходимо <a href="~/Pages/signIn" class="signIn-link">войти</a>, либо <a href="~/Pages/registration" class="signIn-link">зарегистрироваться</a></p>
+            </div>
+        }
+    </div>
+</body>

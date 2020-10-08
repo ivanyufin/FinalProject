@@ -1,0 +1,33 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    var year = Convert.ToInt32(Request["year"]);
+    var month = Convert.ToInt32(Request["month"]);
+    var day = Convert.ToInt32(Request["day"]);
+    var hour = Convert.ToInt32(Request["hour"]);
+    var minute = Convert.ToInt32(Request["minute"]);
+
+    var dayLessonLogic = DependencyResolver.Day_LessonLogic;
+    var deletedDate = new DateTime(year, month, day);
+    var deletedTime = deletedDate.AddHours(hour).AddMinutes(minute);
+    if (!dayLessonLogic.DeleteTime(new DayLesson() { Day_Lesson = deletedDate }, deletedTime))
+    {
+        Response.Redirect("~/Pages/errorPage");
+    }
+    var tableDayLessonLogic = DependencyResolver.Table_DayLessonLogic;
+    if(!tableDayLessonLogic.DeleteDay(new DayLesson() { Day_Lesson = deletedDate }))
+    {
+        Response.Redirect("~/Pages/errorPage");
+    }
+    var timeLessonLogic = DependencyResolver.Time_LessonLogic;
+    if(!timeLessonLogic.Delete(new DayLesson() { Day_Lesson = deletedDate }, deletedTime))
+    {
+        Response.Redirect("~/Pages/errorPage");
+    }
+    var usersTimeLessonLogic = DependencyResolver.Users_TimeLessonLogic;
+    if(!usersTimeLessonLogic.UnscribeAll(deletedTime))
+    {
+        Response.Redirect("~/Pages/errorPage");
+    }
+}

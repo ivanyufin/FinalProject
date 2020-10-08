@@ -1,0 +1,24 @@
+﻿<div id="header">
+    <div id="information-block">
+        <ul id="menu">
+            <li class="menu-item top-line"><a href="~/">обо мне</a></li>
+            <li class="menu-item top-line"><a href="~/Pages/EGE-Istoriya">егэ | история</a></li>
+            <li class="menu-item top-line"><a href="~/Pages/EGE-Social">егэ | обществознание</a></li>
+            <li class="menu-item bottom-line"><a href="~/Pages/OGE-Istoriya">огэ | история</a></li>
+            <li class="menu-item bottom-line"><a href="~/Pages/OGE-Social">огэ | обществознание</a></li>
+            <li class="menu-item bottom-line"><a href="~/Pages/blog">блог</a></li>
+        </ul>
+    </div>
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <div id="signIn">
+            <a href="~/Pages/signIn" class="signIn-link">Вход</a><strong>|</strong><a href="~/Pages/registration" class="signIn-link">Регистрация</a>
+        </div>
+    }
+    else
+    {
+        <div id="signOut">
+            <a href="~/Pages/signOut">Выйти</a>
+        </div>
+    }
+</div>

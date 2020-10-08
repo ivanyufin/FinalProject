@@ -1,0 +1,25 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{ 
+    var dayLessonLogic = DependencyResolver.Day_LessonLogic;
+
+    var times = dayLessonLogic.GetTimeLesson(new DayLesson() { Day_Lesson = new DateTime(Convert.ToInt32(Request["year"]), Convert.ToInt32(Request["month"]), Convert.ToInt32(Request["day"])) });
+    if (times != null)
+    {
+        string str = "|";
+        foreach (var time in times)
+        {
+            str += time + "|";
+        }
+    <text>
+        @str
+    </text>
+    }
+    else
+    {
+        <text>
+            Занятий нет
+        </text>
+    }
+    }

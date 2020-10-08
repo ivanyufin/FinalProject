@@ -1,0 +1,52 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    Layout = "~/Layouts/_Layout.cshtml";
+    bool errorSignIn = Convert.ToBoolean(Request["errorSignIn"]);
+    if (IsPost)
+    {
+        var email = Request["email"];
+        var password = Request["password"];
+        if (email == "admin" && password == "admin")
+        {
+            FormsAuthentication.SetAuthCookie(email, true);
+            Response.Redirect("/Pages/adminBar");
+        }
+        var userLogic = DependencyResolver.UsersLogic;
+        if (userLogic.SignIN(email, password))
+        {
+            FormsAuthentication.SetAuthCookie(email, true);
+            if(userLogic.GetID(email) != -1)
+            {
+
+                Common.UserID = userLogic.GetID(email);
+            }
+            else
+            {
+                Response.Redirect("~/Pages/errorPage");
+            }
+            Response.Redirect("/index");
+        }
+        else
+        {
+            Response.Redirect(Request.UrlReferrer.ToString() + "?errorSignIn=true", true);
+        }
+    }
+}
+<body>
+    <div id="outerBlock">
+        <form action="#" method="post" id="signIn-form">
+            <strong>Вход</strong>
+            <input type="text" name="email" value="" placeholder="Email" />
+            <input type="password" name="password" value="" placeholder="Пароль" />
+            @if (errorSignIn)
+            {
+                <text>
+                    <div id="error-message">Логин и(или) пароль не верны</div>
+                </text>
+            }
+            <input type="submit" value="Войти" id="signIn-button" />
+        </form>
+    </div>
+</body>

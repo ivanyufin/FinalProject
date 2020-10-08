@@ -1,0 +1,646 @@
+﻿/*----------------------------------------------CSS Reset------------------------------------*/
+
+/* Указываем box sizing */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Убираем внутренние отступы */
+ul[class],
+ol[class],
+ul[id],
+ol[id]{
+    padding: 0;
+}
+
+/* Убираем внешние отступы */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul[class],
+ol[class],
+ul[id],
+ol[id]
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+    margin: 0;
+}
+
+/* Выставляем основные настройки по-умолчанию для body */
+body {
+    min-height: 100vh;
+    scroll-behavior: smooth;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+}
+
+/* Удаляем стандартную стилизацию для всех ul и il, у которых есть атрибут class*/
+ul[class],
+ol[class],
+ul[id],
+ol[id]{
+    list-style: none;
+}
+
+/* Элементы a, у которых нет класса, сбрасываем до дефолтных стилей */
+a:not([class]) {
+    text-decoration-skip-ink: auto;
+}
+
+/* Упрощаем работу с изображениями */
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* Указываем понятную периодичность в потоке данных у article*/
+article > * + * {
+    margin-top: 1em;
+}
+
+/* Наследуем шрифты для инпутов и кнопок */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+/* Удаляем все анимации и переходы для людей, которые предпочитай их не использовать */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/*-------------------------------------------------------------------------------------------*/
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#header {
+    width: 100%;
+    height: 150px;
+    /*background-image: url(/Images/russia.jpeg);
+    background-size: cover;*/
+}
+
+#information-block {
+    width: 100%;
+    height: 150px;
+    background-color: #00192b;
+    opacity: 0.9;
+    vertical-align: middle;
+    text-align: center;
+}
+
+#menu {
+    display: block;
+    width: 50%;
+    height: 150px;
+    text-transform: uppercase;
+    position: absolute;
+    left: calc(50% - 25%);
+}
+
+.menu-item {
+    margin-top: 20px;
+    display: inline-flex;
+    font-size: 15pt;
+    border: 3px solid transparent;
+    border-radius: 20px;
+}
+
+.menu-item a{
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.bottom-line {
+    margin-top: 5px;
+}
+
+.menu-item:hover {
+    transition: border ease-in-out 0.1s;
+    border: 3px solid rgb(245, 145, 8);
+}
+
+.menu-item:hover a {
+    color: rgb(245, 145, 8);
+    transition: color ease-in-out 0.1s;
+}
+
+#content {
+    width: 80%;
+    position: absolute;
+    left: 10%;
+    margin-top: 20px;
+}
+
+#content h1 {
+    font-weight: 400;
+    text-align: center;
+}
+
+#content p {
+    text-align: justify;
+    padding: 15px;
+}
+
+.box, .full-box {
+    margin-top: 50px;
+    position: relative;
+}
+
+.full-box {
+    width: 55%;
+}
+
+.box p, .full-box p{
+    font-size: 13pt;
+    text-indent: 1.5em;
+}
+
+.box .header-box strong, .full-box .header-full-box strong{
+    background-color: #00192b;
+    color: white;
+    font-weight: 400;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 14pt;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.full-box .header-full-box {
+    text-align: center;
+    background-color: #00192b;
+}
+
+.full-box .header-full-box strong {
+    background: none;
+}
+
+.full-box table {
+    width: 100%;
+    border: 1px solid #00192b;
+    border-collapse: collapse;
+}
+
+.full-box table td {
+    border: 1px solid #00192b;
+    padding: 20px;
+}
+
+.box .header-box, .full-box .header-full-box{
+    border-bottom: 1px solid #00192b;
+    padding-bottom: 8px;
+}
+
+#trial-lesson {
+    margin: 0 auto;
+    margin-top: 30px;
+    width: 500px;
+    background-color: #00192b;
+    padding: 20px;
+    color: white;
+}
+
+#trial-lesson-header {
+    color: white;
+    font-size: 14pt;
+    text-align: center;
+    padding-left: 35px;
+    padding-right: 35px;
+    font-weight: bold;
+}
+
+#trial-lesson input, button {
+    margin-top: 15px;
+}
+
+#trial-lesson input[type=text], #signIn-form input[type=text], #signIn-form input[type=password] {
+    display: block;
+    width: 100%;
+    font-size: 11pt;
+    padding: 5px;
+    padding-left: 15px;
+}
+
+#trial-lesson button, .lesson-button, #signIn-button, #registration-button, #buttonSave-set-time-block, #button-back, #button-PanelAdmin {
+    width: 100%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    cursor: pointer;
+    background-color: rgb(245, 145, 8);
+    border: 0px;
+    font-size: 13pt;
+    font-weight: bold;
+    border-radius: 15px;
+    color: #00192b;
+    text-align: center;
+}
+
+.lesson-box {
+    margin-top: 20px;
+    width: 200px;
+}
+
+.lesson-box * {
+    margin-top: 10px;
+}
+
+.lesson-box img {
+    width: 200px;
+    display: block;
+    border-radius: 50%;
+}
+
+.lesson-box strong {
+    display: block;
+    text-align: center;
+    font-size: 14pt;
+    color: #00192b;
+}
+
+.lesson-link {
+    display: inline-block;
+    width: 200px;
+    text-decoration: none;
+}
+
+#social-box img {
+    border: 1px solid #00192b;
+}
+
+#social-box-link {
+    position: absolute;
+    left: calc(50% - 100px);
+}
+
+#blog-box-link {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+#who-am-i i{
+    font-size: 14pt;
+    text-decoration: underline;
+}
+
+#who-am-i {
+    font-size: 13pt;
+}
+
+#who-am-i img, #why-am-i img {
+    width: 50%;
+    float: left;
+    margin-right: 40px;
+}
+
+#who-am-i ul li {
+    margin-top: 7px;
+    list-style: disc;
+}
+
+#why-am-i ul {
+    margin-top: 5px;
+    font-size: 13pt;
+}
+
+#why-am-i ul li {
+    list-style: none;
+    position: relative;
+    padding-left: 5px;
+    margin-top: 10px;
+}
+
+#why-am-i ul li:before {
+    content: '';
+    position: absolute;
+    background: url("/Images/check.png");
+    background-size: 20px 20px;
+    width: 20px;
+    height: 20px;
+    left: -25px;
+    top: 5px;
+}
+
+#signIn, #signOut {
+    position: absolute;
+    top: 0px;
+    width: 200px;
+    right: 0px;
+    color: white;
+    line-height: 150px;
+}
+
+.signIn-link, #signOut a {
+    text-decoration: none;
+    padding: 10px;
+    cursor: pointer;
+    background-color: rgb(245, 145, 8);
+    border: 0px;
+    font-size: 13pt;
+    font-weight: bold;
+    border-radius: 15px;
+    color: #00192b;
+    text-align: center;
+}
+
+.signIn-link:hover {
+    color: white;
+}
+
+#outerBlock {
+    display: flex;
+    height: 100vh;
+}
+
+#signIn-form, #registration-form {
+    width: 250px;
+    text-align: center;
+    margin: auto;
+}
+
+#signIn-form input,#registration-form input {
+    width: 100%;
+    height: 40px;
+    margin-top: 15px;
+}
+
+#signIn-form strong, #registration-form strong {
+    font-size: 14pt;
+    text-transform: uppercase;
+    color: #00192b;
+    display: block;
+}
+
+#signIn-form strong:after, #registration-form strong:after {
+    content: '';
+    display: block;
+    width: 90%;
+    height: 1px;
+    background-color: #00192b;
+    margin-top: 5px;
+    margin-left: 5%;
+}
+
+#outerBlockCalendar {
+    display: flex;
+    height: 65vh;
+}
+
+#calendar {
+    width: 80%;
+    height: 100%;
+    border: 1px solid #00192b;
+    margin: 0 auto;
+    border-radius: 15px;
+    color: #00192b;
+}
+
+#set-time-block {
+    display: none;
+    width: 20%;
+    border: 1px solid #00192b;
+    border-radius: 15px;
+    margin-left: 20px;
+}
+
+
+#header-set-time-block {
+    text-align: center;
+    border-bottom: 1px solid #00192b;
+    background: rgb(245, 145, 8);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+#header-set-time-block strong {
+    color: #00192b;
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+#body-set-time-block #head-body-set-time-block, #body-set-time-block p{
+    font-weight: 400;
+    font-size: 12pt;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+}
+
+#body-set-time-block p{
+    padding: 0px;
+}
+
+.strong-time {
+    font-weight: 400;
+    font-size: 14pt;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.time-set-time-block {
+    width: 60%;
+    text-align: center;
+    border-radius: 5px;
+    margin: 0 auto;
+    border: 1px solid gray;
+    cursor: pointer;
+}
+
+.new-time-set-time-block {
+    border: 1px solid lightgray;
+}
+
+#buttonSave-set-time-block {
+    margin-top: 20px;
+}
+
+
+#hour-set-time-block, #minute-set-time-block {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    font-size: 14pt;
+    display: inline-block;
+    width: 30%;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+#hour-set-time-block:hover, #minute-set-time-block:hover {
+    /*background: rgb(245, 145, 8);*/
+}
+
+#header-calendar {
+    height: 150px;
+    background: rgb(245, 145, 8);
+    text-align: center;
+    line-height: 100px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    position: relative;
+}
+
+#header-calendar strong{
+    color: #00192b;
+    font-size: 18pt;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.day-calendar {
+    display: inline-block;
+    width: calc(100% / 7);
+    margin: 0px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.day-calendar:hover {
+    background: rgb(245, 145, 8);
+}
+
+#leftButton {
+    position: absolute;
+    top: 25px;
+    border: 25px solid transparent;
+    border-right: 25px solid #00192b;
+    cursor: pointer;
+}
+
+#rightButton {
+    position: absolute;
+    top: 25px;
+    right: 10px;
+    border: 25px solid transparent;
+    border-left: 25px solid #00192b;
+    cursor: pointer;
+}
+
+#weekBlock {
+    line-height: 50px;
+}
+
+.day-of-week {
+    display: inline-block;
+    width: calc(100% / 7);
+    border-top: 1px solid #00192b;
+    border-right: 1px solid #00192b;
+}
+
+.day-of-week:last-child {
+    border-right: none;
+}
+
+#signIn strong {
+    font-size: 22pt;
+    font-weight: 400;
+}
+
+.dayLesson {
+    width: 20%;
+    height: 60vh;
+    border: 1px solid black;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    display: inline-table;
+    margin-top: 0px;
+}
+
+.dayLesson .header-dayLesson {
+    text-align: center;
+    border-bottom: 1px solid black;
+    height: 50px;
+    line-height: 50px;
+    background: rgb(245, 145, 8);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.dayLesson .header-dayLesson strong {
+    font-weight: bold;
+    font-size: 14pt;
+    color: #00192b;
+}
+
+.dayLesson .body-dayLesson {
+    margin-top: 5px;
+}
+
+#table-Users {
+    width: 100%;
+    border: 1px solid #00192b;
+    border-collapse: collapse;
+    color: #00192b;
+}
+
+#table-Users td {
+    text-align: center;
+}
+
+#table-Users th {
+    border-bottom: 1px solid #00192b;
+    background: rgb(245, 145, 8);
+}
+
+#button-back {
+    width: 70px;
+    text-transform: uppercase;
+    position: absolute;
+    left: 20px;
+    top: 30px;
+    font-size: 16pt;
+}
+
+#error-message {
+    color: red;
+}
+
+.note {
+    text-align: justify;
+    text-indent: 15px;
+    border: 1px solid #00192b;
+    margin-top: 15px;
+}
+
+.note img {
+    width: 40%;
+    height: 40%;
+}
+
+#button-PanelAdmin {
+    width: 200px;
+    position: absolute;
+    top: 30px;
+}
+
+#button-PanelAdmin a {
+    text-decoration: none;
+    color: #00192b;
+}
+
+/*#00192b - синий*/
+
+/*rgb(245, 145, 8) - оранжевый*/

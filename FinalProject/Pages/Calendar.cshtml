@@ -1,0 +1,477 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    var dayLessonLogic = DependencyResolver.Day_LessonLogic;
+}
+<script src="~/Scripts/jquery-3.5.1.js"></script>
+<div id="outerBlockCalendar">
+    <div id="calendar">
+        <div id="header-calendar">
+            <div id="month-block">
+                <div id="leftButton"></div>
+                <strong id="nameMonth">Сентябрь</strong>
+                <div id="rightButton"></div>
+            </div>
+            <div id="weekBlock">
+                <div class="day-of-week">Понедельник</div><div class="day-of-week">Вторник</div><div class="day-of-week">Среда</div><div class="day-of-week">Четверг</div><div class="day-of-week">Пятница</div><div class="day-of-week">Суббота</div><div class="day-of-week">Воскресенье</div>
+            </div>
+        </div>
+        <div id="body-calendar"></div>
+        <div id="numberMonth" style="display: none;"></div>
+    </div>
+    <div id="set-time-block">
+        <div id="header-set-time-block">
+            <strong id="setted-day-text">Дата</strong><br />
+            <strong>Выберите время</strong>
+        </div>
+        <div id="body-set-time-block">
+            <input type="hidden" value="" id="settedDay" />
+        </div>
+    </div>
+</div>
+<script>
+    Date.prototype.daysInMonth = function () {
+            return 32 - new Date(this.getFullYear(), this.getMonth(), 32).getDate();
+        };
+    Date.prototype.getPreviousMonth = function () {
+            if (this.getMonth() - 1 == new Date().getMonth() && this.getFullYear() == new Date().getFullYear())
+                return new Date()
+            else
+                return new Date(this.getFullYear(), this.getMonth() - 1);
+        }
+
+    Date.prototype.getNextMonth = function () {
+            if (this.getMonth() + 1 == new Date().getMonth() && this.getFullYear() == new Date().getFullYear())
+                return new Date()
+            else
+                return new Date(this.getFullYear(), this.getMonth() + 1);
+        }
+
+    var date = new Date();//Текущая дата
+    var settedDate;
+    var subscribeHour;
+    var subscribeMinute;
+    var subscribes;
+    var numberMonth = document.getElementById("numberMonth");
+    var calendar = document.getElementById("calendar");
+    var headerCalendar = document.getElementById("header-calendar");
+    var bodyCalendar = document.getElementById("body-calendar");
+    var nameMonth = document.getElementById("nameMonth");
+    var leftButton = document.getElementById("leftButton");
+    leftButton.setAttribute("onClick", "setPreviousMonth()");
+    var rightButton = document.getElementById("rightButton");
+    rightButton.setAttribute("onClick", "setNextMonth()");
+
+    var setTimeBlock = document.getElementById("set-time-block");
+    var bodySetTimeBlock = document.getElementById("body-set-time-block");
+    var hourSetTimeBlock;
+    var minuteSetTimeBlock;
+    var buttonSaveSetTimeBlock = document.getElementById("buttonSave-set-time-block");
+    var settedDayInput = document.getElementById("settedDay");
+    var settedDayText = document.getElementById("setted-day-text");
+
+    nameMonth.innerHTML = getNameMonth(date.getMonth());
+    numberMonth.innerText += date.getMonth();
+
+    var nextMonth = new Date(date.getFullYear(), date.getMonth() + 1);
+    var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+
+    updateCalendar();
+
+    var countRows = 6;
+    var maxDaysViews = 42;//Количество отображаемых дней
+
+        function updateCalendar() {
+            bodyCalendar.innerHTML = '';
+            firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            nameMonth.innerHTML = getNameMonth(date.getMonth()) + " " + date.getFullYear();
+            for (var i = 0; i < firstDay.getUTCDay(); i++) {
+                var day = document.createElement("div");
+                day.className = "day-calendar";
+                day.innerText += (date.getPreviousMonth().daysInMonth() - (firstDay.getUTCDay()) + (i + 1)).toString();
+                day.style.height = (calendar.clientHeight - headerCalendar.clientHeight) / countRows + "px";
+                day.style.lineHeight = day.style.height;
+                day.style.background = "rgba(64,64,64, 0.6)";
+                day.style.borderTop = "1px solid #00192b";
+                day.style.borderRight = "1px solid #00192b";
+                day.style.borderBottom = "1px solid #00192b";
+                day.setAttribute("onClick", "setDay(" + day.innerText + ", " + (date.getPreviousMonth().getMonth() + 1) + ")");
+                    
+                bodyCalendar.appendChild(day);
+                }
+
+            for (var i = 0; i < date.daysInMonth(); i++) {
+                var day = document.createElement("div");
+                day.className = "day-calendar";
+                day.innerText += (i + 1).toString();
+                day.style.height = (calendar.clientHeight - headerCalendar.clientHeight) / countRows + "px";
+                day.style.lineHeight = day.style.height;
+                day.setAttribute("onClick", "setDay(" + day.innerText + ", " + (date.getMonth() + 1 )+ ")");
+                    
+                if ((i + firstDay.getUTCDay()) < 7)
+                    day.style.borderTop = "1px solid #00192b";
+                    if ((i + 1 + firstDay.getUTCDay()) % 7 != 0)
+                        day.style.borderRight = "1px solid #00192b";
+                    if (i + firstDay.getUTCDay() < 35)
+                        day.style.borderBottom = "1px solid #00192b";
+                    if (i == 35 - firstDay.getUTCDay())
+                        day.style.borderBottomLeftRadius = "15px";
+                    if (i + 1 == date.getDate()) {
+                        if (date.getMonth() == new Date().getMonth() && date.getFullYear() == new Date().getFullYear())
+                            day.style.background = "rgba(245, 145, 8, 0.7)";
+                    }
+                    bodyCalendar.appendChild(day);
+                }
+            if (firstDay.getUTCDay() + date.daysInMonth() < maxDaysViews) {
+                for (var i = 0; i < maxDaysViews - (firstDay.getUTCDay() + date.daysInMonth()); i++) {
+                    var day = document.createElement("div");
+                    day.className = "day-calendar";
+                    day.innerText += (i + 1).toString();
+                    day.style.height = (calendar.clientHeight - headerCalendar.clientHeight) / countRows + "px";
+                    day.style.lineHeight = day.style.height;
+                    day.style.background = "rgba(64,64,64, 0.6)";
+                    day.setAttribute("onClick", "setDay(" + day.innerText + ", " + (date.getNextMonth().getMonth() + 1) + ")");
+                        
+                    if (Math.trunc(bodyCalendar.children.length / 7) == 4)
+                        day.style.borderBottom = "1px solid #00192b";
+                        if (Math.trunc((bodyCalendar.children.length + 1) / 7) == 4)//Если следующий месяц вылезает на предпоследнюю строку
+                            day.style.borderRight = "1px solid #00192b";
+                        if (Math.trunc(bodyCalendar.children.length / 7) == 5 && i < (maxDaysViews - (firstDay.getUTCDay() + date.daysInMonth()) - 1))
+                            day.style.borderRight = "1px solid #00192b";
+                        if (Math.trunc(bodyCalendar.children.length / 7) == 5 && (Math.trunc((bodyCalendar.children.length - 1) / 7) == 4))
+                            day.style.borderBottomLeftRadius = "15px";
+                        if (i == (maxDaysViews - (firstDay.getUTCDay() + date.daysInMonth()) - 1))
+                            day.style.borderBottomRightRadius = "15px";
+                        bodyCalendar.appendChild(day);
+                    }
+            }
+    }
+    var gettedTime = [];
+    function setDay(day, month) {
+            settedDate = date;
+            settedDate.setDate(day);
+            settedDate.setMonth(month);
+            setTimeBlock.style = "display: block";
+        settedDayText.innerText = settedDate.getDate() + "." + settedDate.getMonth() + "." + settedDate.getFullYear();
+        getTime();
+    }
+
+    //Получает время для установленного(settedDate) дня
+    function getTime() {
+
+        gettedTime = [];
+        $.ajax({
+            type: 'get',
+            url: '/Pages/getTime?year=' + settedDate.getFullYear() + "&month=" + settedDate.getMonth() + "&day=" + settedDate.getDate(),
+            success: function (data) {
+                if (data.indexOf("Занятий нет") != -1) {
+                    gettedTime.push("Занятий нет");
+                }
+                var times = data.split("|");
+                for (var i = 1; i < times.length - 1; i++) {
+                    times[i] = times[i].slice(11);
+                    gettedTime.push(times[i]);
+                }
+                displaygettedTime();
+            }
+        });
+    }
+
+    function displaygettedTime() {//TODO Сделать таблицу, в которую будут заноситься ID пользователя и дата занятия
+        bodySetTimeBlock.innerHTML = '';
+        if (gettedTime[0] == "Занятий нет") {
+            var strong = document.createElement("strong");
+            strong.innerText = "Занятий нет";
+            strong.id = "head-body-set-time-block";
+            @if (User.IsInRole("admin"))
+                {
+                <text>
+                    var time = document.createElement("div");
+                    time.className = "time-set-time-block new-time-set-time-block";
+
+                    var hour = document.createElement("select");
+                    hour.id = "hour-set-time-block";
+
+                    var optionHour = document.createElement("option");
+                    optionHour.value = "00";
+                    optionHour.innerText = "00";
+                    hour.appendChild(optionHour);
+
+
+                    var minute = document.createElement("select");
+                    minute.id = "minute-set-time-block";
+                    var optionMinute = document.createElement("option");
+                    optionMinute.value = "00";
+                    optionMinute.innerText = "00";
+                    minute.appendChild(optionMinute);
+
+                    time.appendChild(hour);
+                    time.appendChild(minute);
+                    var button = document.createElement("button");
+                    button.id = "buttonSave-set-time-block";
+                    button.innerText = "Сохранить";
+
+                    button.setAttribute("onClick", "setTime()");
+                    bodySetTimeBlock.appendChild(strong);
+            bodySetTimeBlock.appendChild(time);
+            bodySetTimeBlock.appendChild(button);
+                </text>
+            }
+            else
+            {
+                <text>
+                    bodySetTimeBlock.appendChild(strong);
+                </text>
+            }
+            }
+        else {
+            var strong = document.createElement("strong");
+            strong.innerText = "Существующие занятия";
+            strong.id = "head-body-set-time-block";
+            bodySetTimeBlock.appendChild(strong);
+            for (var i = 0; i < gettedTime.length; i++) {
+
+                var time = document.createElement("div");
+                time.className = "time-set-time-block";
+
+                var strongHour = document.createElement("strong");
+                if (gettedTime[i].split(":")[0] < 10)
+                    strongHour.innerText = "0" + gettedTime[i].split(":")[0];
+                else
+                    strongHour.innerText = gettedTime[i].split(":")[0];
+                strongHour.className = "strong-time";
+                var strongMinute = document.createElement("strong");
+                strongMinute.innerText = gettedTime[i].split(":")[1];
+                strongMinute.className = "strong-time";
+
+                var strongDotted = document.createElement("strong");
+                strongDotted.innerText = ":";
+                strongDotted.className = "strong-time";
+                strongDotted.style = "margin-left: 5px; margin-right: 5px;"
+                @if(User.IsInRole("admin"))
+                {
+                    <text>
+                        time.setAttribute("onClick", "deleteTime(" + strongHour.innerText + "," + strongMinute.innerText + ")");
+                    </text>
+                }
+                else
+                {
+                    <text>
+                        time.setAttribute("onClick", "setSubscribeTime(this, " + strongHour.innerText + "," + strongMinute.innerText + ")");
+                    </text>
+                }
+                time.appendChild(strongHour);
+                time.appendChild(strongDotted);
+                time.appendChild(strongMinute);
+                bodySetTimeBlock.appendChild(time);
+            }
+            @if(User.IsInRole("admin"))
+            {
+                <text>
+            var time = document.createElement("div");
+            time.className = "time-set-time-block new-time-set-time-block";
+
+            var hour = document.createElement("select");
+            hour.id = "hour-set-time-block";
+
+            var optionHour = document.createElement("option");
+            optionHour.value = "00";
+            optionHour.innerText = "00";
+            hour.appendChild(optionHour);
+
+
+            var minute = document.createElement("select");
+            minute.id = "minute-set-time-block";
+            var optionMinute = document.createElement("option");
+            optionMinute.value = "00";
+            optionMinute.innerText = "00";
+            minute.appendChild(optionMinute);
+
+            var add = document.createElement("p");
+            add.innerText = "Добавить";
+            bodySetTimeBlock.appendChild(add);
+            time.appendChild(hour);
+            time.appendChild(minute);
+            bodySetTimeBlock.appendChild(time);
+                </text>
+            }
+        }
+        if (!(gettedTime[0] == "Занятий нет")) {
+            var button = document.createElement("button");
+            button.id = "buttonSave-set-time-block";
+            @if(User.IsInRole("admin"))
+            {
+                <text>
+                    button.innerText = "Сохранить";
+                    button.setAttribute("onClick", "setTime()");
+                </text>
+            }
+            else
+            {
+                <text>
+                    button.innerText = "Записаться";
+                    button.setAttribute("onClick", "subscribeTime()");
+                </text>
+            }
+                bodySetTimeBlock.appendChild(button);
+        }
+        @if (User.IsInRole("admin"))
+        {
+           <text>
+           hourSetTimeBlock = document.getElementById("hour-set-time-block");
+           minuteSetTimeBlock = document.getElementById("minute-set-time-block");
+           setHoursInTimeBlock();
+           setMinutesInTimeBlock();
+           </text>
+        }
+    }
+
+    function subscribeTime() {
+        $.ajax({
+            type: 'get',
+            url: '/Pages/subscribeTime?year=' + settedDate.getFullYear() + "&month=" + settedDate.getMonth() + "&day=" + settedDate.getDate() + "&hour=" + subscribeHour + "&minute=" + subscribeMinute,
+            success: function (data) {
+                alert(data);
+            }
+        });
+    }
+
+    function setSubscribeTime(elem, hour, minute) {
+        var timesSetTimeBlock = document.getElementsByClassName("time-set-time-block");
+        for (var i = 0; i < timesSetTimeBlock.length; i++)
+            timesSetTimeBlock[i].style.border = "1px solid gray";
+        elem.style.border = "1px solid red";
+        subscribeHour = hour;
+        subscribeMinute = minute;
+    }
+
+    function deleteTime(hour, minute) {
+        if (hour < 10)
+            hour = "0" + hour;
+        if (minute < 10)
+            minute = "0" + minute;
+        if (confirm("Вы точно хотите отменить занятие " + settedDate.getDate() + "." + settedDate.getMonth() + "." + settedDate.getFullYear() + " в " + hour + ":" + minute + "?")) {
+            $.ajax({
+                type: 'get',
+                url: '/Pages/deleteTime?year=' + settedDate.getFullYear() + "&month=" + settedDate.getMonth() + "&day=" + settedDate.getDate() + "&hour=" + hour + "&minute=" + minute,
+                success: function (data) {
+                    getTime();
+                }
+            });
+        }
+    }
+
+    function setTime() {
+        var hour;
+        var minute;
+        for (var i = 0; i < hourSetTimeBlock.children.length; i++)
+            if (hourSetTimeBlock.children[i].selected)
+                hour = hourSetTimeBlock.children[i].value;
+        for (var i = 0; i < minuteSetTimeBlock.children.length; i++)
+            if (minuteSetTimeBlock.children[i].selected)
+                minute = minuteSetTimeBlock.children[i].value;
+        $.ajax({
+            type: 'get',
+            url: '/Pages/setTime?year=' + settedDate.getFullYear() + "&month=" + settedDate.getMonth() + "&day=" + settedDate.getDate() + "&hour=" + hour + "&minute=" + minute,
+            success: function (data) {
+                getTime();
+            }
+        });
+    }
+
+        function getDaysInMonth(numberMonth) {
+            return 32 - new Date(new Date().getFullYear(), numberMonth, 32).getDate();
+        }
+
+        function getNameMonth(numberMonth) {
+            switch (numberMonth) {
+                case 0:
+                    return "Январь";
+                    break;
+                case 1:
+                    return "Февраль";
+                    break;
+                case 2:
+                    return "Март";
+                    break;
+                case 3:
+                    return "Апрель";
+                    break;
+                case 4:
+                    return "Май";
+                    break;
+                case 5:
+                    return "Июнь";
+                    break;
+                case 6:
+                    return "Июль";
+                    break;
+                case 7:
+                    return "Август";
+                    break;
+                case 8:
+                    return "Сентябрь";
+                    break;
+                case 9:
+                    return "Октябрь";
+                    break;
+                case 10:
+                    return "Ноябрь";
+                    break;
+                case 11:
+                    return "Декабрь";
+                    break;
+            }
+        }
+
+        function setPreviousMonth() {
+            date = date.getPreviousMonth();
+            updateCalendar();
+        }
+
+        function setNextMonth() {
+            date = date.getNextMonth();
+            updateCalendar();
+    }
+
+    function setHoursInTimeBlock() {
+        hourSetTimeBlock.innerHTML = '';
+        for (var i = 0; i < 24; i++) {
+            var hour = document.createElement("option");
+            if (i < 10) {
+                hour.value = "0" + i;
+                hour.innerText = "0" + i;
+            }
+            else {
+                hour.value = i;
+                hour.innerText = i;
+            }
+            hourSetTimeBlock.appendChild(hour);
+        }
+    }
+
+    function setMinutesInTimeBlock() {
+        minuteSetTimeBlock.innerHTML = '';
+        for (var i = 0; i < 6; i++) {
+            var hour = document.createElement("option");
+            if ((i * 10) < 10) {
+                hour.value = "0" + i;
+                hour.innerText = "0" + i;
+            }
+            else {
+                hour.value = i * 10;
+                hour.innerText = i * 10;
+            }
+            minuteSetTimeBlock.appendChild(hour);
+        }
+    }
+
+    function Initialize() {
+        updateCalendar();
+    }
+
+    window.onload = Initialize;
+    window.onresize = updateCalendar;
+
+</script>

@@ -1,0 +1,67 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    Layout = "~/Layouts/_Layout.cshtml";
+    if (IsPost)
+    {
+        string lastName = Request["last-name"];
+        string firstName = Request["first-name"];
+        string patronymic = Request["patronymic"];
+        string email = Request["email"];
+        string phone = Request["phone"];
+        string password = Request["password"];
+
+        var userLogic = DependencyResolver.UsersLogic;
+        userLogic.Add(new User() { LastName = lastName, FirstName = firstName, Patronymic = patronymic, Email = email, Phone = phone, Password = password });
+        Response.Redirect("/index", true);
+    }
+}
+<body>
+    <div id="outerBlock">
+        <form action="#" method="post" id="registration-form">
+            <strong>Регистрация</strong>
+            <input type="text" name="last-name" value="" placeholder="Фамилия" />
+            <input type="text" name="first-name" value="" placeholder="Имя" />
+            <input type="text" name="patronymic" value="" placeholder="Отчество" />
+            <input type="text" name="email" value="" placeholder="Email" />
+            <input type="text" name="phone" value="" placeholder="Номер телефона" autocomplete="off"/>
+            <input type="password" name="password" value="" placeholder="Пароль" autocomplete="off" id="password"/>
+            <input type="password" name="repassword" value="" placeholder="Пароль еще раз" id="repassword"/>
+            <input type="button" value="Зарегистрироваться" id="registration-button" onclick="validation()"/>
+            <div id="error-message" style="display:none;"></div>
+        </form>
+    </div>
+    <script>
+        function validation() {
+            var valid = true;
+            var registrationForm = document.getElementById("registration-form");
+            var password = document.getElementById("password");
+            var repassword = document.getElementById("repassword");
+            var errorMessage = document.getElementById("error-message");
+            var error = "";
+
+            for (var i = 1; i < registrationForm.children.length - 1; i++)
+                if (registrationForm.children[i].value == '') {
+                    registrationForm.children[i].style.border = "1px solid red";
+                    valid = false;
+                }
+
+            if (!valid)
+                error += "Не все поля заполнены\n";
+
+            if (password.value != repassword.value) {
+                error += "Пароли не совпадают";
+                password.style.border = "1px solid red";
+                repassword.style.border = "1px solid red";
+                valid = false;
+            }
+            if (valid)
+                registrationForm.submit();
+            else {
+                errorMessage.style.display = "inline";
+                errorMessage.innerText = error;
+            }
+        }
+    </script>
+</body>

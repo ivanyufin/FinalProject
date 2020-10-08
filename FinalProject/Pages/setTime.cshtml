@@ -1,0 +1,23 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    var dayLessonLogic = DependencyResolver.Day_LessonLogic;
+    var dayLesson = new DayLesson() { Day_Lesson = new DateTime(Convert.ToInt32(Request["year"]), Convert.ToInt32(Request["month"]), Convert.ToInt32(Request["day"])) };
+    var timeLesson = dayLesson.Day_Lesson.AddHours(Convert.ToInt32(Request["hour"])).AddMinutes(Convert.ToInt32(Request["minute"]));
+    if(dayLessonLogic.SetTimeLesson(dayLesson, timeLesson) == -1)
+    {
+        Response.Redirect("~/Pages/errorPage");
+    }
+    var tableDayLessonLogic = DependencyResolver.Table_DayLessonLogic;
+    if(tableDayLessonLogic.AddDay(dayLesson) == -1)
+    {
+        Response.Redirect("~/Pages/errorPage");
+    }
+
+    var timeLessonLogic = DependencyResolver.Time_LessonLogic;
+    if(timeLessonLogic.Add(dayLesson, timeLesson) == -1)
+    {
+        Response.Redirect("~/Pages/errorPage");
+    }
+}

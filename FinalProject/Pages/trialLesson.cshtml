@@ -1,0 +1,38 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    Layout = "~/Layouts/_Layout.cshtml";
+}
+
+<body>
+    <div id="content">
+        <h1>Пользователи, записавшиеся на бесплатный урок:</h1>
+        @{ 
+            var trialLessonLogic = DependencyResolver.Trial_LessonLogic;
+            var users = trialLessonLogic.GetAll();
+            if(users == null)
+            {
+                Response.Redirect("~/Pages/errorPage");
+            }
+            else
+            {
+                <table id="table-Users">
+                    <tr id="head-table-Users">
+                        <th>Имя</th>
+                        <th>Номер телефона</th>
+                        <th>Email</th>
+                    </tr>
+                    @foreach (var user in users)
+                    {
+                        <tr>
+                            <td>@user.Name</td>
+                            <td>@user.Phone</td>
+                            <td>@user.Email</td>
+                        </tr>
+                    }
+                </table>
+            }
+        }
+    </div>
+</body>

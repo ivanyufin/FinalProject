@@ -1,0 +1,77 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    Layout = "~/Layouts/_Layout.cshtml";
+    var year = Convert.ToInt32(Request["year"]);
+    var month = Convert.ToInt32(Request["month"]);
+    var day = Convert.ToInt32(Request["day"]);
+    var hour = Convert.ToInt32(Request["hour"]);
+    var minute = Convert.ToInt32(Request["minute"]);
+    var date = Common.TimeToNormalView(day) + "." + Common.TimeToNormalView(month) + "." + Common.TimeToNormalView(year);
+    var time = Common.TimeToNormalView(hour) + ":" + Common.TimeToNormalView(minute);
+}
+<body>
+    
+<script src="~/Scripts/jquery-3.5.1.js"></script>
+    @RenderPage("~/Pages/headerAdmin.cshtml")
+    <button id="button-back" onclick="goBack()"><</button>
+    <div id="content">
+        <h1>Ученики, записавшиеся на занятие <strong>@date</strong> в <strong>@time</strong></h1>
+        <table id="table-Users">
+            <tr id="head-table-Users">
+                <th style="display:none;"></th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Email</th>
+                <th>Номер телефона</th>
+                <th></th>
+            </tr>
+            @{
+                var usersTimeLessonLogic = DependencyResolver.Users_TimeLessonLogic;
+                var userLogic = DependencyResolver.UsersLogic;
+                var users = usersTimeLessonLogic.GetSubscribeUsers(new DateTime(year, month, day).AddHours(hour).AddMinutes(minute));
+                foreach (var user in users)
+                {
+                    <text>
+                        <tr>
+                            <td style="display:none;">@userLogic.GetUserByID(user.ID).ID</td>
+                            <td>@userLogic.GetUserByID(user.ID).LastName</td>
+                            <td>@userLogic.GetUserByID(user.ID).FirstName</td>
+                            <td>@userLogic.GetUserByID(user.ID).Patronymic</td>
+                            <td>@userLogic.GetUserByID(user.ID).Email</td>
+                            <td>@userLogic.GetUserByID(user.ID).Phone</td>
+                            <td><input type="button" value="Удалить" id="button" onclick="unscribeUser(this)" /></td>
+                        </tr>
+                    </text>
+                }
+            }
+        </table>
+    </div>
+    <script>
+        var unscribedTR;
+        function unscribeUser(elem) {
+            unscribedTR = elem.parentElement.parentElement;
+            var userID = unscribedTR.children[0].innerText;
+            var year = @year;
+            var month = @month;
+            var day = @day;
+            var hour = @hour;
+            var minute = @minute;
+            if (confirm("Вы точно хотите убрать ученика из списка записавшихся на это занятие?")) {
+                $.ajax({
+                    type: 'get',
+                    url: '/Pages/unscribeUser?year=' + year + "&month=" + month + "&day=" + day + "&hour=" + hour + "&minute=" + minute + "&userID=" + userID,
+                    success: function () {
+                    }
+                });
+                unscribedTR.remove();
+            }
+        }
+
+        function goBack() {
+            location.href = "@Request.UrlReferrer.ToString()";
+        }
+    </script>
+</body>

@@ -1,0 +1,81 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    var tableDayLessonLogic = DependencyResolver.Table_DayLessonLogic;
+    var daysLesson = tableDayLessonLogic.GetDaysLesson();
+    var dayLessonLogic = DependencyResolver.Day_LessonLogic;
+    Layout = "~/Layouts/_Layout.cshtml";
+}
+<body>
+    @RenderPage("~/Pages/headerAdmin.cshtml")
+    <div id="content">
+        <h1>На данный момент у вас @daysLesson.Count() предстоящих дня(ей), на которые есть занятия:</h1>
+        @{
+            foreach (var dayLesson in daysLesson)
+            {
+                var timesLessons = dayLessonLogic.GetTimeLesson(new DayLesson() { Day_Lesson = dayLesson.DayLesson });
+                var date = Common.TimeToNormalView(dayLesson.DayLesson.Day) + "." + Common.TimeToNormalView(dayLesson.DayLesson.Month) + "." + dayLesson.DayLesson.Year;
+                <text>
+                    <div class="dayLesson">
+                        <div class="header-dayLesson">
+                            <strong class="dateDayLesson">@date</strong>
+                        </div>
+                        <div class="body-dayLesson">
+                            @{
+                                foreach (var timeLesson in timesLessons)
+                                {
+                                    var hour = Common.TimeToNormalView(timeLesson.Hour);
+                                    var minute = Common.TimeToNormalView(timeLesson.Minute);
+                                    <div class="time-set-time-block" onclick="getSubscribes(this)" id="button">
+                                        <text>
+                                            <strong class="strong-time">@hour</strong>
+                                            <strong class="strong-time">:</strong>
+                                            <strong class="strong-time">@minute</strong>
+                                        </text>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                    
+                </text>
+            }
+        }
+    <form action="~/Pages/lesson" method="get" id="getSubscribesForm" style="display:none;">
+        <input type="text" name="year" value="" id="yearForm"/>
+        <input type="text" name="month" value="" id="monthForm"/>
+        <input type="text" name="day" value="" id="dayForm"/>
+        <input type="text" name="hour" value="" id="hourForm"/>
+        <input type="text" name="minute" value="" id="minuteForm"/>
+    </form>
+    </div>
+    <script>
+        var dateDayLesson;
+        var hourDayLesson = document.getElementById("hourDayLesson");
+        var minuteDayLesson = document.getElementById("minuteDayLesson");
+
+        var getSubscribesForm = document.getElementById("getSubscribesForm");
+        var yearForm = document.getElementById("yearForm");
+        var monthForm = document.getElementById("monthForm");
+        var dayForm = document.getElementById("dayForm");
+        var hourForm = document.getElementById("hourForm");
+        var minuteForm = document.getElementById("minuteForm");
+
+        function getSubscribes(elem) {
+            dateDayLesson = elem.parentElement.parentElement.children[0].children[0];
+            dayForm.value = dateDayLesson.innerText.split(".")[0];
+            monthForm.value = dateDayLesson.innerText.split(".")[1];
+            yearForm.value = dateDayLesson.innerText.split(".")[2];
+
+            hourForm.value = elem.children[0].children[0].innerText;
+            minuteForm.value = elem.children[0].children[2].innerText;
+            console.log("День:" + dayForm.value);
+            console.log("Месяц:" + monthForm.value);
+            console.log("Год:" + yearForm.value);
+            console.log("Час:" + hourForm.value);
+            console.log("Минут:" + minuteForm.value);
+            getSubscribesForm.submit();
+        }
+    </script>
+</body>

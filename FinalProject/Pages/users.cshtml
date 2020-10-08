@@ -1,0 +1,41 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    Layout = "~/Layouts/_Layout.cshtml";
+    var usersLogic = DependencyResolver.UsersLogic;
+    var users = usersLogic.GetAll();
+}
+
+<body>
+    @RenderPage("~/Pages/headerAdmin.cshtml")
+    <div id="content">
+        <h1>На данный момент зарегистрировано @users.Count() учеников(а):</h1>
+
+        <table id="table-Users">
+            <tr id="head-table-Users">
+                <th style="display:none;"></th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Email</th>
+                <th>Номер телефона</th>
+            </tr>
+            @{
+                foreach (var user in users)
+                {
+                    <text>
+                        <tr>
+                            <td style="display:none;">@user.ID</td>
+                            <td>@user.LastName</td>
+                            <td>@user.FirstName</td>
+                            <td>@user.Patronymic</td>
+                            <td>@user.Email</td>
+                            <td>@user.Phone</td>
+                        </tr>
+                    </text>
+                }
+            }
+        </table>
+    </div>
+</body>

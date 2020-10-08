@@ -1,0 +1,25 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    Layout = null;
+    var timeLessonLogic = DependencyResolver.Time_LessonLogic;
+    var dayLessonLogic = DependencyResolver.Day_LessonLogic;
+
+    var dayLesson = new DayLesson() { Day_Lesson = new DateTime(Convert.ToInt32(Request["year"]), Convert.ToInt32(Request["month"]), Convert.ToInt32(Request["day"])) };
+    var getTimeLesson = dayLessonLogic.GetTimeLesson(dayLesson);
+    foreach (var timeLesson in getTimeLesson)
+    {
+        var subscribes = timeLessonLogic.GetSubscribeUsers(dayLesson, timeLesson);
+        foreach (var user in subscribes)
+        {
+            if (user == Common.UserID)
+            {<text>@timeLesson</text>
+            }
+            else
+            {
+            <p>не получилось</p>
+                }
+            }
+        }
+    }

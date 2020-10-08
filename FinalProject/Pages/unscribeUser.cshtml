@@ -1,0 +1,24 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    Layout = "~/Layouts/_Layout.cshtml";
+    var userID = Convert.ToInt32(Request["userID"]);
+    var year = Convert.ToInt32(Request["year"]);
+    var month = Convert.ToInt32(Request["month"]);
+    var day = Convert.ToInt32(Request["day"]);
+    var hour = Convert.ToInt32(Request["hour"]);
+    var minute = Convert.ToInt32(Request["minute"]);
+}
+<body>
+    <div>
+        @{
+            var usersTimeLessonLogic = DependencyResolver.Users_TimeLessonLogic;
+            var timeLessonLogic = DependencyResolver.Time_LessonLogic;
+            var dayLesson = new DayLesson() { Day_Lesson = new DateTime(year, month, day) };
+            var timeLesson = dayLesson.Day_Lesson.AddHours(hour).AddMinutes(minute);
+            usersTimeLessonLogic.UnscribeUser(timeLesson, userID);
+            timeLessonLogic.UnscribeUser(new DayLesson() { Day_Lesson = dayLesson.Day_Lesson }, timeLesson, userID);
+        }
+    </div>
+</body>

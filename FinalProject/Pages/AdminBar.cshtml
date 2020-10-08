@@ -1,0 +1,22 @@
+﻿@using FinalProject.Common;
+@using FinalProject.Entities;
+
+@{
+    Layout = "~/Layouts/_Layout.cshtml";
+
+}
+<body>
+    @if (!User.Identity.IsAuthenticated || !User.IsInRole("admin"))
+    {
+        <p>У вас нет доступа</p>
+    }
+    else
+    {
+        @RenderPage("~/Pages/headerAdmin.cshtml")
+
+        <div id="content">
+            <h1>Выберите день и время занятия</h1>
+            @RenderPage("~/Pages/Calendar.cshtml")
+        </div>
+    }
+</body>

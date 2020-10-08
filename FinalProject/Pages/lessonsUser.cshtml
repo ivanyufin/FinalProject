@@ -1,0 +1,10 @@
+﻿@{
+    Layout = "~/Layouts/_Layout.cshtml";
+}
+<body>
+    @RenderPage("~/Pages/headerUser.cshtml")
+    <div id="content">
+        <h1>Выберите удобный день и свободное время</h1>
+        @RenderPage("~/Pages/Calendar.cshtml")
+    </div>
+</body>
